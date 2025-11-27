@@ -24,6 +24,7 @@ from django.urls import include
 from django.urls import path
 urlpatterns += [
      path('catalog/', include('catalog.urls')),
+     path('accounts/', include('django.contrib.auth.urls')),
 ]
 # Добавьте URL соотношения, чтобы перенаправить запросы с корневого URL, на URL приложения
 from django.views.generic import RedirectView

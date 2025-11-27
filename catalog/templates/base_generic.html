@@ -23,15 +23,14 @@
             <ul class="sidebar-nav">
               <li><a href="{% url 'index' %}">Home</a></li>
              <li><a href="{% url 'books' %}">All books</a></li>
-              <li><a href="">All authors</a></li>
+              <li><a href="{% url 'authors' %}">All authors</a></li>
             </ul>
           {% endblock %}
         </div>
-        <!-- This is the correct location for the content block -->
         <div class="col-sm-10 ">{% block content %}{% endblock %}</div>
       </div>
 
-      <!-- Moved pagination inside the container/body structure -->
+      <!-- Блок pagination перемещен сюда -->
       {% block pagination %}
         {% if is_paginated %}
           <div class="pagination">
@@ -53,4 +52,3 @@
     </div>
   </body>
 </html>
-
