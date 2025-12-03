@@ -9,7 +9,7 @@
       <li class="{% if bookinst.is_overdue %}text-danger{% endif %}">
         <a href="{% url 'book-detail' bookinst.book.pk %}">{{ bookinst.book.title }}</a> 
         ({{ bookinst.due_back }}) - 
-        Заемщик: <a href="#">{{ bookinst.borrower }}</a> <!-- Ссылка на профиль заемщика, если нужно -->
+        Заемщик: <a href="#">{{ bookinst.borrower }}</a>
       </li>
     {% endfor %}
   </ul>

@@ -1,17 +1,11 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-  <h1>Book List</h1>
-  {% if author_list %}
-    <ul>
-      {% for author in author_list %}
-        <li>
-          <a href="{% url 'author-detail' author.pk %}">{{ author.first_name }} {{ author.last_name }}</a>
-          ({{ author.date_of_birth }} - {{ author.date_of_death|default:"Настоящее время" }})
-        </li>
-      {% endfor %}
-    </ul>
-  {% else %}
-    <p>Book unnamed.</p>
-  {% endif %}
+  <form action="" method="post">
+      {% csrf_token %}
+      <table>
+      {{ form.as_table }}
+      </table>
+      <input type="submit" value="Submit" />
+  </form>
 {% endblock %}

@@ -3,13 +3,8 @@ from .models import Book, Author, BookInstance, Genre
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 def index(request):
-    """
-    Функция отображения для домашней страницы сайта.
-    """
-    # Генерация "количеств" некоторых главных объектов
     num_books=Book.objects.all().count()
     num_instances=BookInstance.objects.all().count()
-    # Доступные книги (статус = 'a')
     num_instances_available=BookInstance.objects.filter(status__exact='a').count()
     num_authors = Author.objects.count()  # The 'all()' is implied by default.
 
@@ -75,11 +70,6 @@ class LoanedBooksAllListView(PermissionRequiredMixin, generic.ListView):
 
 
     class LoanedBooksAllListView(PermissionRequiredMixin, generic.ListView):
-        """
-        Универсальное представление на основе класса, отображающее список всех книг,
-        которые в настоящее время заимствованы. Видимо только для пользователей
-        с разрешением 'can_mark_returned'.
-        """
         model = BookInstance
         template_name = 'catalog/bookinstance_list_borrowed_all.html'
         paginate_by = 10
@@ -101,22 +91,13 @@ from .models import BookInstance  # Импорт модели
 
 @permission_required('catalog.can_mark_returned')
 def renew_book_librarian(request, pk):
-    """
-    View function for renewing a specific BookInstance by librarian
-    """
     book_inst = get_object_or_404(BookInstance, pk=pk)
-
-    # Если это POST запрос - обрабатываем данные формы
     if request.method == 'POST':
         form = RenewBookForm(request.POST)
-
         if form.is_valid():
-            # Обрабатываем валидные данные
             book_inst.due_back = form.cleaned_data['renewal_date']
             book_inst.save()
             return HttpResponseRedirect(reverse('all-borrowed'))
-
-    # Если это GET (или другая метод) или форма невалидна
     else:
         proposed_renewal_date = datetime.date.today() + datetime.timedelta(weeks=3)
         form = RenewBookForm(initial={'renewal_date': proposed_renewal_date})
@@ -148,15 +129,15 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 from .models import Book
 class BookCreate(PermissionRequiredMixin, CreateView):
     model = Book
-    fields = ['title', 'author', 'summary', 'isbn', 'genre', 'language']
-    permission_required = 'catalog.can_mark_returned' # Пример разрешения для персонала
+    fields = ['title', 'author', 'summary', 'isbn', 'genre']
+    permission_required = 'catalog.can_mark_returned'
 
 class BookUpdate(PermissionRequiredMixin, UpdateView):
     model = Book
-    fields = ['title', 'author', 'summary', 'isbn', 'genre', 'language']
+    fields = ['title', 'author', 'summary', 'isbn', 'genre']
     permission_required = 'catalog.can_mark_returned'
 
 class BookDelete(PermissionRequiredMixin, DeleteView):
     model = Book
-    success_url = reverse_lazy('books') # Куда перенаправить после удаления
+    success_url = reverse_lazy('books')
     permission_required = 'catalog.can_mark_returned'
